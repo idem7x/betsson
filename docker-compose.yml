@@ -15,7 +15,7 @@ services:
       - APPIUM=true
       - WEB_VNC=true
     volumes:
-      - ./apps:/root/tmp
+      - ./apps:/apps
     networks:
       - test-network
 
@@ -37,13 +37,13 @@ services:
     command: >
       bash -c "
         echo 'Waiting for Android emulator to be ready...' &&
-        while [ \"\$(docker exec android-emulator cat device_status 2>/dev/null || echo 'BOOTING')\" != \"READY\" ]; do
-          echo 'Emulator status: '\$(docker exec android-emulator cat device_status 2>/dev/null || echo 'BOOTING') &&
+        while [ \"\$(docker exec android-emulator cat device_status)\" != \"READY\" ]; do
+          echo 'Emulator status: '\$(docker exec android-emulator cat device_status) &&
           sleep 10
         done &&
         echo 'Emulator is READY! Installing APK...' &&
         adb connect android-emulator:5555 &&
-        adb install /root/tmp/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk &&
+        adb install /apps/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk &&
         echo 'Running tests...' &&
         mvn clean test
       "
