@@ -3,7 +3,10 @@ FROM openjdk:11-jdk-slim
 RUN apt-get update && apt-get install -y \
     maven \
     android-tools-adb \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && curl -fsSL https://get.docker.com -o get-docker.sh \
+    && sh get-docker.sh \
+    && rm -rf /var/lib/apt/lists/* get-docker.sh
 
 WORKDIR /workspace
 
